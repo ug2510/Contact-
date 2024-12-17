@@ -1,6 +1,6 @@
 <template>
-  <q-layout>
-    <q-header>
+  <q-layout view="hHh lpR fFf">
+    <q-header elevated fixed>
       <q-toolbar>
         <q-btn flat @click="drawer = !drawer" round dense icon="menu" class="q-mr-sm" />
         <q-toolbar-title>Directory</q-toolbar-title>
