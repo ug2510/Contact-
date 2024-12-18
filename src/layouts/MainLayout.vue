@@ -1,5 +1,10 @@
 <template>
   <q-layout view="hHh lpR fFf">
+    <div
+      v-if="drawer"
+      class="drawer-overlay"
+      @click="drawer = false"
+    ></div>
     <q-header elevated fixed>
       <q-toolbar>
         <q-btn flat @click="drawer = !drawer" round dense icon="menu" class="q-mr-sm" />
@@ -49,16 +54,29 @@
                       @click="My_Profile = true"
                     />
                     <q-dialog v-model="My_Profile">
-                      <q-card>
+                      <q-card style="width: 400px; max-width: 90%">
                         <q-card-section>
-                          <div class="text-h6">My Profile</div>
+                          <div class="text-h6 text-center">My Profile</div>
                         </q-card-section>
 
-                        <q-card-section class="q-pt-none">
-                          <div>
-                            <p>Name: {{ username }}</p>
-                            <p>Phone number: {{ phnumber }}</p>
-                            <p>Address: {{ address }}</p>
+                        <q-card-section class="q-pt-none q-pb-md">
+                          <div class="row items-center no-wrap" style="margin-top: 20px;">
+                            <div class="col-8">
+                              <p><strong>Name:</strong> {{ username }}</p>
+                              <p><strong>Phone:</strong> {{ phnumber }}</p>
+                              <p><strong>Address:</strong> {{ address }}</p>
+                            </div>
+
+                            <q-separator vertical inset class="q-mx-md" />
+
+                            <div class="col-auto">
+                              <q-avatar size="100px">
+                                <img
+                                  src="https://cdn.quasar.dev/img/boy-avatar.png"
+                                  alt="Profile Picture"
+                                />
+                              </q-avatar>
+                            </div>
                           </div>
                         </q-card-section>
 
@@ -67,6 +85,7 @@
                         </q-card-actions>
                       </q-card>
                     </q-dialog>
+
                     <q-btn
                       color="negative"
                       size="lg"
@@ -274,6 +293,17 @@ watch(selected, (newValue) => {
 .custom-table .q-table__header {
   background-color: #1c4c76 !important;
   color: #333 !important;
+}
+
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4); /* Adjust the opacity as needed */
+  z-index: 998; /* Ensure it's behind the drawer but above other content */
+  transition: opacity 0.3s;
 }
 
 /* .custom-table .q-table__header th {
