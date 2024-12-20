@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { reactive, ref, watch } from "vue";
+import useEditContact from "./EditContact"; 
 
 export default {
   name: "EditContact",
@@ -74,50 +74,7 @@ export default {
     },
   },
   setup(props, { emit }) {
-    const model = reactive({
-      contact: {
-        name: "",
-        email: "",
-        phnumber: "",
-      },
-    });
-
-    const errorDialog = ref(false);
-    const errorMessage = ref("");
-
-    watch(
-      () => props.contact,
-      (newContact) => {
-        if (newContact) {
-          model.contact = { ...newContact };
-        }
-      },
-      { immediate: true }
-    );
-
-    const saveContact = () => {
-      // Perform frontend validation
-      if (!model.contact.name.trim()) {
-        errorMessage.value = "Name must not be empty or contain only spaces.";
-        errorDialog.value = true;
-        return;
-      }
-
-      if (!model.contact.email) {
-        errorMessage.value = "Email is required.";
-        errorDialog.value = true;
-        return;
-      }
-
-      if (!model.contact.phnumber) {
-        errorMessage.value = "Phone Number is required.";
-        errorDialog.value = true;
-        return;
-      }
-
-      // Emit the save event if all validations pass
-      emit("contact-saved", model.contact);
-    };
+    const { model, saveContact, errorDialog, errorMessage } = useEditContact(props, emit);
 
     return {
       model,
@@ -130,17 +87,5 @@ export default {
 </script>
 
 <style scoped>
-.full-width {
-  max-width: 400px;
-  width: 100%;
-}
-
-.q-card {
-  margin: auto;
-}
-
-.q-card-section h4 {
-  font-size: 1.25rem;
-  font-weight: bold;
-}
+@import './EditContact.css'
 </style>

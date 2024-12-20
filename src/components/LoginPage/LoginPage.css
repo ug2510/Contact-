@@ -1,0 +1,78 @@
+.login-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+  }
+  
+  .login-image {
+    flex: 1;
+    max-width: 50%;
+    height: 100vh;
+  }
+  
+  .login-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .login-form-container {
+    flex: 1;
+    max-width: 50%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .full-height {
+    height: 100%;
+    width: 100%;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .signup-option {
+    font-size: 0.9rem;
+  }
+  
+  .signup-option p {
+    margin: 0;
+  }
+  
+  .signup-option .q-btn {
+    text-decoration: underline;
+    font-weight: bold;
+  }
+  
+  .form-field {
+    width: 75%;
+    justify-content: center;
+    margin-left: 70px;
+  }
+  
+  @media (max-width: 768px) {
+    .login-container {
+      flex-direction: column;
+    }
+  
+    .login-image {
+      max-width: 100%;
+      height: auto;
+    }
+  
+    .login-form-container {
+      max-width: 100%;
+      height: auto;
+      padding: 20px;
+    }
+  }

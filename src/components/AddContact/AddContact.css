@@ -1,0 +1,12 @@
+.full-width {
+    width: 100%;
+  }
+  
+  .q-card {
+    margin: auto;
+  }
+  
+  .q-card-section h4 {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }

@@ -85,96 +85,22 @@
   </div>
 </template>
 
-<script setup>
-import axios from 'axios';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router'; 
-
-const router = useRouter();
-
-const name = ref("");
-const number = ref("");
-const email = ref("");
-const address = ref("");
-const password = ref("");
-const confirmPassword = ref("");
-const confirmPasswordTouched = ref(false);
-
-const dialogVisible = ref(false);
-const dialogTitle = ref("");
-const dialogMessage = ref("");
-
-const showDialog = (title, message) => {
-  dialogTitle.value = title;
-  dialogMessage.value = message;
-  dialogVisible.value = true;
-};
-
-const handleSignUp = async () => {
-  if (!name.value || !number.value || !address.value || !password.value || !confirmPassword.value) {
-    showDialog("Validation Error", "All fields are required.");
-    return;
-  }
-
-  if (password.value !== confirmPassword.value) {
-    showDialog("Password Mismatch", "Passwords do not match.");
-    return;
-  }
-
-  try {
-    const response = await axios.post('http://localhost:8080/api/contacts/user', {
-      name: name.value,
-      email: email.value,
-      phnumber: number.value,
-      address: address.value,
-      password: password.value,
-    });
-
-    if (response.data.success) {
-      showDialog("Signed Up!", "Your account has been created successfully.");
-      setTimeout(() => router.push('/'), 1500); // Navigate after showing the dialog
-    } else {
-      showDialog("Sign Up Failed", response.data.message || "There was an error creating your account.");
-    }
-  } catch (error) {
-    console.error("Error during sign up:", error);
-
-    let errorMessage = "There was an error creating your account.";
-    if (error.response && error.response.data && error.response.data.message) {
-      errorMessage = error.response.data.message;
-    }
-
-    showDialog("Sign Up Failed", errorMessage);
-  }
+<script>
+ import SignUp from './SignUp'
+ export default {
+  name: 'SignUpView',
+  data() {
+    return {
+      ...SignUp.data(), 
+    };
+  },
+  methods: {
+    ...SignUp.methods, 
+  },
 };
 </script>
 
+
 <style scoped>
-.full-width {
-  width: 100%;
-}
-
-.q-card {
-  margin: auto;
-}
-
-.q-form {
-  width: 100%;
-}
-
-.flex {
-  display: flex;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
-.q-pa-sm {
-  padding: 8px;
-}
-
-.text-bold {
-  font-weight: bold;
-}
+@import './SignUp.css';
 </style>

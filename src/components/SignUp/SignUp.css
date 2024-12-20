@@ -1,0 +1,27 @@
+.full-width {
+    width: 100%;
+  }
+  
+  .q-card {
+    margin: auto;
+  }
+  
+  .q-form {
+    width: 100%;
+  }
+  
+  .flex {
+    display: flex;
+  }
+  
+  .justify-center {
+    justify-content: center;
+  }
+  
+  .q-pa-sm {
+    padding: 8px;
+  }
+  
+  .text-bold {
+    font-weight: bold;
+  }

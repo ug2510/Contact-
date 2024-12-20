@@ -1,0 +1,53 @@
+.q-card {
+    background-color: #fefefe;
+  }
+  
+  .table-custom .q-table__header {
+    background-color: #4a90e2;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .q-table__row--hover:hover {
+    background-color: #f9fbfd;
+  }
+  
+  .btn-pastel-red {
+    background-color: #c41212;
+    color: #ffffff;
+    font-size: 1.125rem;
+    font-weight: bold;
+    padding: 10px 16px;
+    border-radius: 0;
+  }
+  
+  .btn-pastel-red:hover {
+    background-color: #ffa7a7;
+  }
+  
+  .btn-pastel-green {
+    background-color: #75d175;
+    color: #ffffff;
+    font-size: 1.125rem;
+    font-weight: bold;
+    padding: 10px 16px;
+    border-radius: 0;
+  }
+  
+  .btn-pastel-green:hover {
+    background-color: #b8f6b8;
+  }
+  
+  .btn-pastel-blue {
+    background-color: #c8e4ff;
+    color: #175cac;
+    font-size: 1.125rem;
+    font-weight: bold;
+    padding: 10px 16px;
+    border-radius: 0;
+  }
+  
+  .btn-pastel-blue:hover {
+    background-color: #a7d4ff;
+  }

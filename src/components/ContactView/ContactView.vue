@@ -78,7 +78,6 @@
 
     <q-dialog v-model="showEditDialog" persistent>
       <q-card style="min-width: 400px">
-          
         <q-card-section>
           <q-btn flat round dense icon="close" @click="showEditDialog = false" aria-label="Close" />
           <EditContact
@@ -99,8 +98,7 @@
         </q-card-section>
 
         <q-card-section>
-          Are you sure you want to delete the contact <strong>{{ selectedContact.name }}</strong
-          >?
+          Are you sure you want to delete the contact <strong>{{ selectedContact.name }}</strong>?
         </q-card-section>
 
         <q-card-actions align="right">
@@ -126,11 +124,11 @@
     </q-dialog>
   </q-page>
 </template>
+
 <script>
-import { ref, reactive } from 'vue'
-import axios from 'axios'
-import AddContact from './AddContact.vue'
-import EditContact from './EditContact.vue'
+import AddContact from '../AddContact/AddContact.vue'
+import EditContact from '../EditContact/EditContact.vue'
+import ContactView from './ContactView.js'  // Import the DeleteView.js script
 
 export default {
   name: 'ContactView',
@@ -138,153 +136,10 @@ export default {
     AddContact,
     EditContact,
   },
-  setup() {
-    const contacts = ref([])
-    const dropdownVisible = reactive({})
-    const pagination = ref({ page: 1, rowsPerPage: 5 })
-
-    const showAddContact = ref(false)
-    const showEditDialog = ref(false)
-    const showDeleteDialog = ref(false)
-    const showSuccessDialog = ref(false)
-    const selectedContact = ref({}) 
-
-    const columns = [
-      { name: 'name', label: 'Name', align: 'left', field: 'name' },
-      { name: 'email', label: 'Email', align: 'left', field: 'email' },
-      { name: 'phnumber', label: 'Phone Number', align: 'left', field: 'phnumber' },
-      { name: 'action', label: 'Action', align: 'center', field: 'action' },
-    ]
-
-    const getContacts = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/api/contacts')
-        contacts.value = response.data
-      } catch (error) {
-        console.error('Error fetching contacts:', error)
-      }
-    }
-
-    const openEditDialog = (contact) => {
-      // console.log(selectedContact.value)
-      selectedContact.value = { ...contact }
-      showEditDialog.value = true
-    }
-
-    const handleContactEdited = async (updatedContact) => {
-      try {
-        await axios.patch(
-          `http://localhost:8080/api/contacts/phone/${updatedContact.phnumber}`,
-          updatedContact,
-        )
-        getContacts()
-        showEditDialog.value = false
-      } catch (error) {
-        console.error('Error updating contact:', error)
-      }
-    }
-
-    // const handleContactEdited = () => {
-    //   getContacts()
-    //   showEditDialog.value = false
-    // }
-
-    const openDeleteDialog = (contact) => {
-      selectedContact.value = contact
-      showDeleteDialog.value = true
-    }
-
-    const confirmDelete = async () => {
-      try {
-        await axios.patch(
-          `http://localhost:8080/api/contacts/deactivate/${selectedContact.value.phnumber}`,
-        )
-        showDeleteDialog.value = false
-        showSuccessDialog.value = true
-        getContacts()
-      } catch (error) {
-        console.error('Error deleting contact:', error)
-      }
-    }
-    const handleContactSaved = () => {
-      getContacts()
-      showAddContact.value = false
-    }
-
-    getContacts()
-
-    return {
-      contacts,
-      pagination,
-      columns,
-      showAddContact,
-      showEditDialog,
-      showDeleteDialog,
-      showSuccessDialog,
-      selectedContact,
-      dropdownVisible,
-      openEditDialog,
-      handleContactEdited,
-      openDeleteDialog,
-      confirmDelete,
-      handleContactSaved,
-    }
-  },
+  mixins: [ContactView],  // Use the logic from DeleteView.js
 }
 </script>
 
 <style scoped>
-.q-card {
-  background-color: #fefefe;
-}
-
-.table-custom .q-table__header {
-  background-color: #4a90e2;
-  color: white;
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-.q-table__row--hover:hover {
-  background-color: #f9fbfd;
-}
-
-.btn-pastel-red {
-  background-color: #c41212;
-  color: #ffffff;
-  font-size: 1.125rem;
-  font-weight: bold;
-  padding: 10px 16px;
-  border-radius: 0;
-}
-
-.btn-pastel-red:hover {
-  background-color: #ffa7a7;
-}
-
-.btn-pastel-green {
-  background-color: #75d175;
-  color: #ffffff;
-  font-size: 1.125rem;
-  font-weight: bold;
-  padding: 10px 16px;
-  border-radius: 0;
-}
-
-.btn-pastel-green:hover {
-  background-color: #b8f6b8;
-}
-
-.btn-pastel-blue {
-  background-color: #c8e4ff;
-  color: #175cac;
-  font-size: 1.125rem;
-  font-weight: bold;
-  padding: 10px 16px;
-  border-radius: 0;
-}
-
-.btn-pastel-blue:hover {
-  background-color: #a7d4ff;
-}
+@import './ContactView.css';
 </style>
