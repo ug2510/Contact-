@@ -66,13 +66,28 @@
         </q-form>
       </q-card-section>
     </q-card>
+
+    <q-dialog v-model="dialogVisible">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">{{ dialogTitle }}</div>
+        </q-card-section>
+
+        <q-card-section>
+          <p>{{ dialogMessage }}</p>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="OK" color="primary" @click="dialogVisible = false" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
 <script setup>
 import axios from 'axios';
 import { ref } from 'vue';
-import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router'; 
 
 const router = useRouter();
@@ -85,22 +100,24 @@ const password = ref("");
 const confirmPassword = ref("");
 const confirmPasswordTouched = ref(false);
 
+const dialogVisible = ref(false);
+const dialogTitle = ref("");
+const dialogMessage = ref("");
+
+const showDialog = (title, message) => {
+  dialogTitle.value = title;
+  dialogMessage.value = message;
+  dialogVisible.value = true;
+};
+
 const handleSignUp = async () => {
   if (!name.value || !number.value || !address.value || !password.value || !confirmPassword.value) {
-    Swal.fire({
-      icon: "error",
-      title: "Validation Error",
-      text: "All fields are required.",
-    });
+    showDialog("Validation Error", "All fields are required.");
     return;
   }
 
   if (password.value !== confirmPassword.value) {
-    Swal.fire({
-      icon: "error",
-      title: "Password Mismatch",
-      text: "Passwords do not match.",
-    });
+    showDialog("Password Mismatch", "Passwords do not match.");
     return;
   }
 
@@ -110,26 +127,24 @@ const handleSignUp = async () => {
       email: email.value,
       phnumber: number.value,
       address: address.value,
-      password: password.value
+      password: password.value,
     });
 
-    if (response.status === 201) {
-      Swal.fire({
-        icon: "success",
-        title: "Signed Up!",
-        text: "Your account has been created successfully.",
-        timer: 1500,
-        showConfirmButton: false,
-      });
-      router.push('/'); 
+    if (response.data.success) {
+      showDialog("Signed Up!", "Your account has been created successfully.");
+      setTimeout(() => router.push('/'), 1500); // Navigate after showing the dialog
+    } else {
+      showDialog("Sign Up Failed", response.data.message || "There was an error creating your account.");
     }
   } catch (error) {
     console.error("Error during sign up:", error);
-    Swal.fire({
-      icon: "error",
-      title: "Sign Up Failed",
-      text: "There was an error creating your account.",
-    });
+
+    let errorMessage = "There was an error creating your account.";
+    if (error.response && error.response.data && error.response.data.message) {
+      errorMessage = error.response.data.message;
+    }
+
+    showDialog("Sign Up Failed", errorMessage);
   }
 };
 </script>
@@ -141,11 +156,6 @@ const handleSignUp = async () => {
 
 .q-card {
   margin: auto;
-}
-
-.q-btn img {
-  display: inline-block;
-  vertical-align: middle;
 }
 
 .q-form {

@@ -41,15 +41,29 @@
             type="submit"
             class="full-width q-mt-md"
           />
-          
         </q-form>
       </q-card-section>
     </q-card>
+
+    <!-- Error Dialog -->
+    <q-dialog v-model="errorDialog">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Validation Error</div>
+        </q-card-section>
+        <q-card-section>
+          <p>{{ errorMessage }}</p>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="OK" color="primary" @click="errorDialog = false" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
 <script>
-import { reactive, watch } from "vue";
+import { reactive, ref, watch } from "vue";
 
 export default {
   name: "EditContact",
@@ -67,41 +81,58 @@ export default {
         phnumber: "",
       },
     });
+
+    const errorDialog = ref(false);
+    const errorMessage = ref("");
+
     watch(
       () => props.contact,
       (newContact) => {
         if (newContact) {
-          model.contact = { ...newContact }; 
+          model.contact = { ...newContact };
         }
       },
-      { immediate: true } 
+      { immediate: true }
     );
 
-    const saveContact = async () => {
-      if (!model.contact.name || !model.contact.email || !model.contact.phnumber) {
-        return; 
+    const saveContact = () => {
+      // Perform frontend validation
+      if (!model.contact.name.trim()) {
+        errorMessage.value = "Name must not be empty or contain only spaces.";
+        errorDialog.value = true;
+        return;
       }
 
-      emit("contact-saved", model.contact); 
+      if (!model.contact.email) {
+        errorMessage.value = "Email is required.";
+        errorDialog.value = true;
+        return;
+      }
+
+      if (!model.contact.phnumber) {
+        errorMessage.value = "Phone Number is required.";
+        errorDialog.value = true;
+        return;
+      }
+
+      // Emit the save event if all validations pass
+      emit("contact-saved", model.contact);
     };
 
     return {
       model,
       saveContact,
+      errorDialog,
+      errorMessage,
     };
   },
 };
 </script>
 
-
 <style scoped>
 .full-width {
   max-width: 400px;
   width: 100%;
-}
-
-.q-banner {
-  margin-top: 20px;
 }
 
 .q-card {

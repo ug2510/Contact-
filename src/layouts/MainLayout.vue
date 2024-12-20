@@ -301,8 +301,8 @@ watch(selected, (newValue) => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.4); /* Adjust the opacity as needed */
-  z-index: 998; /* Ensure it's behind the drawer but above other content */
+  background: rgba(0, 0, 0, 0.4); 
+  z-index: 998; 
   transition: opacity 0.3s;
 }
 
